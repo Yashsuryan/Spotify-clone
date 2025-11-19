@@ -286,6 +286,14 @@ li .info {
   width: 40px;
 }
 
+.volume {
+    width: 230px;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 10px;
+}
+
 @media (max-width: 1400px) {
   .left {
     position: absolute;
@@ -378,4 +386,8 @@ li .info {
   left: 0%;
   transition: left 0.5s;
 }
+.volume {
+    display: none;
+}
+
 }

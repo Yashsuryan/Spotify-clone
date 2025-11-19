@@ -113,6 +113,26 @@ async function main() {
   document.querySelector(".close").addEventListener("click", () => {
     document.querySelector(".left").style.left = "-125%";
   });
+
+  //Add an event listener to previous
+  previous.addEventListener("click", ()=>{
+    console.log("Previous clicked")
+    console.log(currentSong)
+    let index = songs.indexOf(currentSong.src.split("/").slice(-1)[0])
+    if((index-1) >= 0){
+        playMusic(songs[index-1])
+    }
+  })
+
+  //Add an event listener to next
+  next.addEventListener("click", ()=>{
+    console.log("Next clicked")
+    
+    let index = songs.indexOf(currentSong.src.split("/").slice(-1)[0])
+    if((index+1) < songs.length){
+        playMusic(songs[index+1])
+    }
+  })
 }
 
 main();

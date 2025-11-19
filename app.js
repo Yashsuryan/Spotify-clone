@@ -3,8 +3,8 @@ let currentSong = new Audio();
 function formatTime(seconds) {
   const mins = Math.floor(seconds / 60);
   const secs = Math.floor(seconds % 60);
-  const formattedMins = String(mins).padStart(2, '0');
-  const formattedSecs = String(secs).padStart(2, '0');
+  const formattedMins = String(mins).padStart(2, "0");
+  const formattedSecs = String(secs).padStart(2, "0");
   return `${formattedMins}:${formattedSecs}`;
 }
 
@@ -26,20 +26,28 @@ async function getSongs() {
   return songs;
 }
 
-const playMusic = (track, pause=false) => {
+let currentIndex = 0;
+let songs = [];
+
+const playMusic = (track, pause = false) => {
   currentSong.src = "/songs/" + track;
-  if(!pause){
-    currentSong.play()
+  if (!pause) {
+    currentSong.play();
     play.src = "images/pause.svg";
-  } 
+  }
   document.querySelector(".songinfo").innerHTML = track;
   document.querySelector(".songtime").innerHTML = "00:00/00:00";
 };
 
 async function main() {
   // Get the list of all the songs
-  let songs = await getSongs();
-  playMusic(songs[0], true)
+  songs = await getSongs();
+  playMusic(songs[currentIndex], true);
+
+  currentSong.addEventListener("ended", () => {
+    currentIndex = (currentIndex + 1) % songs.length; // loop to start
+    playMusic(songs[currentIndex]);
+  });
 
   //show all the songs in the playlist
   let songUL = document
@@ -51,7 +59,7 @@ async function main() {
       `<li> 
     <img class="invert" src="images/music.svg" alt="">
                     <div class="info">
-                        <div>${song}</div>
+                        <div>${song.replaceAll("%20", " ")}</div>
                         <div>Song Artist</div>
                     </div>
                     <div class="playnow">
@@ -80,18 +88,31 @@ async function main() {
   });
 
   //Listen for timeupdate event
-  currentSong.addEventListener("timeupdate", ()=>{
+  currentSong.addEventListener("timeupdate", () => {
     console.log(currentSong.currentTime, currentSong.duration);
-    document.querySelector(".songtime").innerHTML = `${formatTime(currentSong.currentTime)}/${formatTime(currentSong.duration)}`
-    document.querySelector(".circle").style.left = (currentSong.currentTime/ currentSong.duration) * 100 + "%";
-  })
+    document.querySelector(".songtime").innerHTML = `${formatTime(
+      currentSong.currentTime
+    )}/${formatTime(currentSong.duration)}`;
+    document.querySelector(".circle").style.left =
+      (currentSong.currentTime / currentSong.duration) * 100 + "%";
+  });
 
   //add an event listner to seekbar
-  document.querySelector(".seekbar").addEventListener("click", e=>{
-    let percent = (e.offsetX/e.target.getBoundingClientRect().width) * 100;
+  document.querySelector(".seekbar").addEventListener("click", (e) => {
+    let percent = (e.offsetX / e.target.getBoundingClientRect().width) * 100;
     document.querySelector(".circle").style.left = percent + "%";
-    currentSong.currentTime = ((currentSong.duration)* percent)/100
-  })
+    currentSong.currentTime = (currentSong.duration * percent) / 100;
+  });
+
+  //Add an event listener for hamburger
+  document.querySelector(".hamburger").addEventListener("click", () => {
+    document.querySelector(".left").style.left = "0";
+  });
+
+  //Add an event listener for close button
+  document.querySelector(".close").addEventListener("click", () => {
+    document.querySelector(".left").style.left = "-125%";
+  });
 }
 
 main();

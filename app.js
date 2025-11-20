@@ -139,9 +139,13 @@ async function main() {
   displayAlbums();
 
   currentSong.addEventListener("ended", () => {
-    currentIndex = (currentIndex + 1) % songs.length; // loop to start
+  if (isLooping) {
+    playMusic(songs[currentIndex]); // Replay the same song
+  } else {
+    currentIndex = (currentIndex + 1) % songs.length;
     playMusic(songs[currentIndex]);
-  });
+  }
+});
 
   //Attach an event listener to play, next and previous
   play.addEventListener("click", () => {
@@ -221,6 +225,25 @@ async function main() {
         .getElementsByTagName("input")[0].value = 10;
     }
   });
+
+  //Song loop feature
+  let isLooping = false;
+const loopToggle = document.getElementById("loopToggle");
+
+loopToggle.addEventListener("click", (e) => {
+  isLooping = !isLooping;
+
+  if (isLooping) {
+    loopToggle.src = "images/loop.svg";
+    loopToggle.classList.add("active");
+  } else {
+    loopToggle.src = "images/unloop.svg";
+    loopToggle.classList.remove("active");
+  }
+
+  console.log("Looping is now", isLooping ? "enabled" : "disabled");
+});
+
 }
 
 main();

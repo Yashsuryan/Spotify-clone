@@ -33,16 +33,17 @@ async function getSongs(folder) {
   for (const song of songs) {
     songUL.innerHTML =
       songUL.innerHTML +
-      `<li> 
-    <img class="invert" src="images/music.svg" alt="">
-                    <div class="info">
-                        <div>${song.replaceAll("%20", " ")}</div>
-                        <div>Song Artist</div>
-                    </div>
-                    <div class="playnow">
-                        <span>Play Now</span>
-                        <img class="invert" src="images/play.svg" alt="">
-                    </div> </li>`;
+      `<li>
+  <img class="invert" src="images/music.svg" alt="Music Icon">
+  <div class="info">
+    <div class="song-name">${decodeURIComponent(song)}</div>
+    <div class="artist-name">Song Artist</div>
+  </div>
+  <div class="playnow">
+    <span>Play Now</span>
+    <img class="invert" src="images/play.svg" alt="Play Button">
+  </div>
+</li>`;
   }
 
   //Attach an event listener to each song
@@ -65,7 +66,9 @@ const playMusic = (track, pause = false) => {
     currentSong.play();
     play.src = "images/pause.svg";
   }
-  document.querySelector(".songinfo").innerHTML = track;
+  const readableName = decodeURIComponent(track);
+
+  document.querySelector(".songinfo").innerHTML = readableName;
   document.querySelector(".songtime").innerHTML = "00:00/00:00";
 };
 
@@ -122,7 +125,7 @@ async function displayAlbums() {
   Array.from(document.getElementsByClassName("card")).forEach((e) => {
     e.addEventListener("click", async (item) => {
       songs = await getSongs(`songs/${item.currentTarget.dataset.folder}`);
-      playMusic(songs[0])
+      playMusic(songs[0]);
     });
   });
 }
@@ -203,20 +206,21 @@ async function main() {
     });
 
   //Add event listener to mute the track
-document.querySelector(".volume>img").addEventListener("click", e=>{ 
-        if(e.target.src.includes("volume.svg")){
-            e.target.src = e.target.src.replace("volume.svg", "mute.svg")
-            currentSong.volume = 0;
-            document.querySelector(".range").getElementsByTagName("input")[0].value = 0;
-        }
-        else{
-            e.target.src = e.target.src.replace("mute.svg", "volume.svg")
-            currentSong.volume = .10;
-            document.querySelector(".range").getElementsByTagName("input")[0].value = 10;
-        }
-
-    })
-
+  document.querySelector(".volume>img").addEventListener("click", (e) => {
+    if (e.target.src.includes("volume.svg")) {
+      e.target.src = e.target.src.replace("volume.svg", "mute.svg");
+      currentSong.volume = 0;
+      document
+        .querySelector(".range")
+        .getElementsByTagName("input")[0].value = 0;
+    } else {
+      e.target.src = e.target.src.replace("mute.svg", "volume.svg");
+      currentSong.volume = 0.1;
+      document
+        .querySelector(".range")
+        .getElementsByTagName("input")[0].value = 10;
+    }
+  });
 }
 
 main();

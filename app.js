@@ -133,11 +133,6 @@ async function main() {
         playMusic(songs[index+1])
     }
   })
-  //Add an event to volume
-  document.querySelector(".range").getElementsByTagName("input")[0].addEventListener("change", (e) => {
-  console.log("Setting volume to",e.target.value, "/100");
-  currentSong.volume = parseInt(e.target.value) / 100;
-});
 }
 
 main();

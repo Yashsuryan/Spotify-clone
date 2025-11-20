@@ -294,6 +294,36 @@ li .info {
     gap: 10px;
 }
 
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  background: #222;
+  border-radius: 3px;
+  outline: none;
+}
+
+/* Track */
+input[type="range"]::-webkit-slider-runnable-track {
+  background: #333;
+  height: 6px;
+  border-radius: 3px;
+}
+
+/* Thumb */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 16px;
+  width: 16px;
+  background: white; /* bright green thumb */
+  border: 4px solid black; /* subtle blue border */
+  border-radius: 50%;
+  cursor: pointer;
+  margin-top: -5px;
+  box-shadow: 0 0 5px #00f260;
+}
+
+
 @media (max-width: 1400px) {
   .left {
     position: absolute;
